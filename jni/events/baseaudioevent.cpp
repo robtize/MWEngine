@@ -239,6 +239,11 @@ void BaseAudioEvent::setStartPosition( float value )
     _eventLength = std::max( 0, ( _eventEnd - 1 ) - _eventStart );
 }
 
+float BaseAudioEvent::getStartPosition()
+{
+    return _startPosition;
+}
+
 void BaseAudioEvent::setEndPosition( float value )
 {
     _endPosition = value;
@@ -252,19 +257,14 @@ void BaseAudioEvent::setEndPosition( float value )
     _eventLength = std::max( 0, ( _eventEnd - 1 ) - _eventStart );
 }
 
-void BaseAudioEvent::setDuration( float value )
-{
-    setEndPosition( _startPosition + value );
-}
-
-float BaseAudioEvent::getStartPosition()
-{
-    return _startPosition;
-}
-
 float BaseAudioEvent::getEndPosition()
 {
     return _endPosition;
+}
+
+void BaseAudioEvent::setDuration( float value )
+{
+    setEndPosition( _startPosition + value );
 }
 
 float BaseAudioEvent::getDuration()

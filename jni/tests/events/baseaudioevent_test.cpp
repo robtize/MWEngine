@@ -324,7 +324,8 @@ TEST( BaseAudioEvent, PositionInSamples )
 
     // test whether values in seconds have updated accordingly
 
-    int SAMPLE_RATE = 44100;
+    int SAMPLE_RATE = AudioEngineProps::SAMPLE_RATE;
+
     float expectedStartPosition = BufferUtility::bufferToSeconds( eventStart, SAMPLE_RATE );
     float expectedEndPosition   = BufferUtility::bufferToSeconds( expectedEnd, SAMPLE_RATE );
     float expectedDuration      = expectedEndPosition - expectedStartPosition;
@@ -372,7 +373,7 @@ TEST( BaseAudioEvent, PositionInSeconds )
     float startPosition = randomFloat( 0, 10 );
     float endPosition   = startPosition + randomFloat( 0, 10 );
 
-    int SAMPLE_RATE = 44100;
+    int SAMPLE_RATE = AudioEngineProps::SAMPLE_RATE;
 
     float expectedDuration  = endPosition - startPosition;
     int expectedEventStart  = BufferUtility::secondsToBuffer( startPosition, SAMPLE_RATE );
@@ -415,6 +416,22 @@ TEST( BaseAudioEvent, PositionInSeconds )
         floatRounding( expectedEndPosition, 5 ),
         floatRounding( audioEvent->getEndPosition(), 5 )
     ) << "expected end position to have corrected after updating of duration";
+
+    deleteAudioEvent( audioEvent );
+}
+
+TEST( BaseAudioEvent, PositionInSecondsBufferConversions )
+{
+    BaseAudioEvent* audioEvent = new BaseAudioEvent();
+
+    int SAMPLE_RATE = AudioEngineProps::SAMPLE_RATE;
+
+    audioEvent->setStartPosition( 0 );
+    audioEvent->setDuration( 0.9 );
+
+    float expectedDuration = BufferUtility::secondsToBuffer( 0.9, SAMPLE_RATE );
+
+    EXPECT_EQ( expectedDuration, audioEvent->getEventLength());
 
     deleteAudioEvent( audioEvent );
 }
