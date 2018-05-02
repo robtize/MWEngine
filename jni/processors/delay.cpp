@@ -23,6 +23,7 @@
 #include "delay.h"
 #include "../global.h"
 #include <utilities/utils.h>
+#include <utilities/volumeutil.h>
 #include <math.h>
 
 /* constructor / destructor */
@@ -93,10 +94,10 @@ void Delay::process( AudioBuffer* sampleBuffer, bool isMonoSource )
 
             // higher feedback levels can cause a massive noise-fest, "limit" them!
             if ( _feedback > .5f ) {
-                channelBuffer[ i ] += ( delaySample * _mix * ( 1.5f - _feedback ));
+                channelBuffer[ i ] = SUM_SAMPLES( channelBuffer[ i ], delaySample * _mix * ( 1.5f - _feedback ));
             }
             else {
-                channelBuffer[ i ] += ( delaySample * _mix );
+                channelBuffer[ i ] = SUM_SAMPLES( channelBuffer[ i ], delaySample * _mix );
             }
         }
         _delayIndices[ c ] = delayIndex; // update last index

@@ -24,6 +24,7 @@
 #include "../audioengine.h"
 #include "../global.h"
 #include "../sequencer.h"
+#include <utilities/volumeutil.h>
 
 /* constructor / destructor */
 
@@ -318,7 +319,7 @@ void SampleEvent::mixBuffer( AudioBuffer* outputBuffer, int bufferPosition,
                     s1 = srcBuffer[ t ];
                     s2 = srcBuffer[ t + 1 ];
 
-                    tgtBuffer[ i ] += (( s1 + ( s2 - s1 ) * frac ) * _volume );
+                    tgtBuffer[ i ] = SUM_SAMPLES( tgtBuffer[ i ], ( s1 + ( s2 - s1 ) * frac ) * _volume );
                 }
             }
             else if ( loopStarted && fi >= lo )
@@ -340,7 +341,7 @@ void SampleEvent::mixBuffer( AudioBuffer* outputBuffer, int bufferPosition,
                         s1 = srcBuffer[ t ];
                         s2 = srcBuffer[ t + 1 ];
 
-                        tgtBuffer[ i ] += (( s1 + ( s2 - s1 ) * frac ) * _volume );
+                        tgtBuffer[ i ] = SUM_SAMPLES( tgtBuffer[ i ], ( s1 + ( s2 - s1 ) * frac ) * _volume );
                     }
                 }
             }
@@ -379,7 +380,7 @@ void SampleEvent::mixBuffer( AudioBuffer* outputBuffer, int bufferPosition,
                     s1 = srcBuffer[ t ];
                     s2 = srcBuffer[ t + 1 ];
 
-                    tgtBuffer[ i ] += (( s1 + ( s2 - s1 ) * frac ) * _volume );
+                    tgtBuffer[ i ] = SUM_SAMPLES( tgtBuffer[ i ], ( s1 + ( s2 - s1 ) * frac ) * _volume );
                 }
 
                 // this is a loopeable event (thus using internal read pointer)
@@ -445,7 +446,7 @@ bool SampleEvent::getBufferForRange( AudioBuffer* buffer, int readPos )
                         srcBuffer = _buffer->getBufferForChannel( 0 );
 
                     SAMPLE_TYPE* targetBuffer = buffer->getBufferForChannel( c );
-                    targetBuffer[ i ]        += ( srcBuffer[ _rangePointer ] * _volume );
+                    targetBuffer[ i ] = SUM_SAMPLES( targetBuffer[ i ], srcBuffer[ _rangePointer ] * _volume );
                 }
 
                 if ( ++_rangePointer > _bufferRangeEnd )
@@ -491,7 +492,7 @@ bool SampleEvent::getBufferForRange( AudioBuffer* buffer, int readPos )
                     s2 = srcBuffer[ t + 1 ];
 
                     SAMPLE_TYPE* targetBuffer = buffer->getBufferForChannel( c );
-                    targetBuffer[ i ]        += (( s1 + ( s2 - s1 ) * frac ) * _volume );
+                    targetBuffer[ i ] = SUM_SAMPLES( targetBuffer[ i ], ( s1 + ( s2 - s1 ) * frac ) * _volume );
                 }
 
                 if (( _rangePointerF += _playbackRate ) > bufferRangeEnd )

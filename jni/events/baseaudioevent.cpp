@@ -402,7 +402,7 @@ void BaseAudioEvent::mixBuffer( AudioBuffer* outputBuffer, int bufferPosition,
                     srcBuffer = _buffer->getBufferForChannel( c );
                     tgtBuffer = outputBuffer->getBufferForChannel( c );
 
-                    tgtBuffer[ i ] += ( srcBuffer[ readPointer ] * _volume );
+                    tgtBuffer[ i ] = SUM_SAMPLES( tgtBuffer[ i ], srcBuffer[ readPointer ] * _volume );
                 }
             }
             else if ( loopStarted && i >= loopOffset )
@@ -418,7 +418,7 @@ void BaseAudioEvent::mixBuffer( AudioBuffer* outputBuffer, int bufferPosition,
                         srcBuffer = _buffer->getBufferForChannel( c );
                         tgtBuffer = outputBuffer->getBufferForChannel( c );
 
-                        tgtBuffer[ i ] += ( srcBuffer[ readPointer ] * _volume );
+                        tgtBuffer[ i ] = SUM_SAMPLES( tgtBuffer[ i ], srcBuffer[ readPointer ] * _volume );
                     }
                 }
             }
@@ -448,8 +448,8 @@ void BaseAudioEvent::mixBuffer( AudioBuffer* outputBuffer, int bufferPosition,
                     else
                         srcBuffer = _buffer->getBufferForChannel( 0 );
 
-                    tgtBuffer       = outputBuffer->getBufferForChannel( c );
-                    tgtBuffer[ i ] += ( srcBuffer[ _readPointer ] * _volume );
+                    tgtBuffer      = outputBuffer->getBufferForChannel( c );
+                    tgtBuffer[ i ] = SUM_SAMPLES( tgtBuffer[ i ], srcBuffer[ _readPointer ] * _volume );
                 }
                 // this is a loopeable event (thus using internal read pointer)
                 // set the internal read pointer to the event start so it keeps playing indefinitely

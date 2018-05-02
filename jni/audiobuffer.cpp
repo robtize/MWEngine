@@ -22,6 +22,7 @@
  */
 #include "audiobuffer.h"
 #include <utilities/bufferutility.h>
+#include <utilities/volumeutil.h>
 #include <algorithm>
 #include <string.h>
 
@@ -86,7 +87,7 @@ int AudioBuffer::mergeBuffers( AudioBuffer* aBuffer, int aReadOffset, int aWrite
                 else
                     break;
             }
-            targetBuffer[ i ] += ( srcBuffer[ r ] * aMixVolume );
+            targetBuffer[ i ] = SUM_SAMPLES( targetBuffer[ i ], srcBuffer[ r ] * aMixVolume );
             ++writtenSamples;
         }
     }

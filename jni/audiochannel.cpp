@@ -159,15 +159,15 @@ void AudioChannel::mixBuffer( AudioBuffer* bufferToMixInto, float mixVolume ) {
         bool isLeftPanned = ( _pan < 0 );
 
         for ( int i = 0; i < buffersToWrite; ++i ) {
-            leftTargetBuffer[ i ]  += leftSrcBuffer[ i ]  * leftVolume;
-            rightTargetBuffer[ i ] += rightSrcBuffer[ i ] * rightVolume;
+            leftTargetBuffer[ i ]  = SUM_SAMPLES( leftTargetBuffer[ i ],  leftSrcBuffer[ i ]  * leftVolume );
+            rightTargetBuffer[ i ] = SUM_SAMPLES( rightTargetBuffer[ i ], rightSrcBuffer[ i ] * rightVolume );
 
             // pan the channel contents into the opposite channel
 
             if ( isLeftPanned )
-                leftTargetBuffer[ i ] += rightSrcBuffer[ i ] * -_pan;
+                leftTargetBuffer[ i ] = SUM_SAMPLES( leftTargetBuffer[ i ], rightSrcBuffer[ i ] * -_pan );
             else
-                rightTargetBuffer[ i ] += leftSrcBuffer[ i ] * _pan;
+                rightTargetBuffer[ i ] = SUM_SAMPLES( rightTargetBuffer[ i ], leftSrcBuffer[ i ] * _pan );
         }
     }
 }

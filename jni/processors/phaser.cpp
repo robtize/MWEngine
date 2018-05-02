@@ -23,6 +23,7 @@
 #include "phaser.h"
 #include "../global.h"
 #include <math.h>
+#include <utilities/volumeutil.h>
 
 /* constructor / destructor */
 
@@ -144,7 +145,7 @@ void Phaser::process( AudioBuffer* sampleBuffer, bool isMonoSource )
 
             _zm1 = y;
 
-            channelBuffer[ i ] += ( y * _depth );
+            channelBuffer[ i ] = SUM_SAMPLES( channelBuffer[ i ], y * _depth );
         }
 
         // save CPU cycles when working on a mono source
